@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- ══════════════════════════════════════════════════════
+     HERO SECTION
+     ══════════════════════════════════════════════════════ -->
+<section class="hero">
+    <div class="hero__container">
+        <div class="hero__text">
+            <h1 class="hero__title animate-on-scroll">
+                <span class="hero__greeting">Bienvenue dans l'univers de</span>
+                <span class="hero__name">Nina</span>
+            </h1>
+            <p class="hero__subtitle animate-on-scroll" data-delay="200">
+                Des mots qui inspirent, des images qui émeuvent.
+            </p>
+            <div class="hero__scroll-hint animate-on-scroll" data-delay="400">
+                <span>Découvrir</span>
+                <div class="hero__arrow">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12l7 7 7-7"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hero__particles" id="particles"></div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     CATEGORY FILTERS
+     ══════════════════════════════════════════════════════ -->
+<section class="filters">
+    <div class="filters__container">
+        <a href="{% url 'citations:home' %}"
+           class="filter-btn {% if not current_category %}filter-btn--active{% endif %}">
+            Toutes
+        </a>
+        {% for value, label in categories %}
+        <a href="{% url 'citations:home' %}?category={{ value }}"
+           class="filter-btn {% if current_category == value %}filter-btn--active{% endif %}">
+            {{ label }}
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     CITATIONS GRID
+     ══════════════════════════════════════════════════════ -->
+<section class="citations">
+    <div class="citations__container">
+        {% if citations %}
+        <div class="citations__grid">
+            {% for citation in citations %}
+            <article class="card animate-on-scroll" data-delay="{{ forloop.counter0|divisibleby:1 }}00">
+                <a href="{% url 'citations:detail' citation.pk %}" class="card__link">
+                    <div class="card__image-wrapper">
+                        <img src="{{ citation.image.url }}"
+                             alt="Illustration de la citation"
+                             class="card__image"
+                             loading="lazy">
+                        <div class="card__overlay"></div>
+                    </div>
+                    <div class="card__content">
+                        <span class="card__category">{{ citation.get_category_display }}</span>
+                        <blockquote class="card__quote">
+                            "{{ citation.text|truncatewords:25 }}"
+                        </blockquote>
+                        <footer class="card__footer">
+                            <span class="card__author">— {{ citation.author }}</span>
+                            <span class="card__date">
+                                {{ citation.created_at|date:"d M Y" }}
+                            </span>
+                        </footer>
+                    </div>
+                </a>
+            </article>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if citations.has_other_pages %}
+        <nav class="pagination">
+            {% if citations.has_previous %}
+            <a href="?page={{ citations.previous_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}"
+               class="pagination__btn pagination__btn--prev">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Précédent
+            </a>
+            {% endif %}
+
+            <div class="pagination__numbers">
+                {% for num in citations.paginator.page_range %}
+                    {% if citations.number == num %}
+                    <span class="pagination__num pagination__num--active">{{ num }}</span>
+                    {% elif num > citations.number|add:'-3' and num < citations.number|add:'3' %}
+                    <a href="?page={{ num }}{% if current_category %}&category={{ current_category }}{% endif %}"
+                       class="pagination__num">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            {% if citations.has_next %}
+            <a href="?page={{ citations.next_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}"
+               class="pagination__btn pagination__btn--next">
+                Suivant
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+            {% endif %}
+        </nav>
+        {% endif %}
+
+        {% else %}
+        <!-- Empty state -->
+        <div class="empty">
+            <div class="empty__icon">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                </svg>
+            </div>
+            <h2 class="empty__title">Aucune citation pour le moment</h2>
+            <p class="empty__text">Les premières citations arrivent bientôt...</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}

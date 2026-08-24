@@ -1,0 +1,8 @@
+django>=4.2,<5.0
+gunicorn
+whitenoise[brotli]
+dj-database-url
+psycopg2-binary
+Pillow
+django-cloudinary-storage
+cloudinary

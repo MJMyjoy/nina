@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nina — Auteure</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='serif'>N</text></svg>">
+</head>
+<body>
+
+    <!-- ══════════════════════════════════════════════════════
+         SPLASH SCREEN — Animated "N" Logo
+         ══════════════════════════════════════════════════════ -->
+    <div id="splash-screen" class="splash">
+        <div class="splash__content">
+            <div class="splash__logo">
+                <span class="splash__letter">N</span>
+                <div class="splash__glow"></div>
+            </div>
+            <div class="splash__line"></div>
+            <p class="splash__tagline">Mots & Lumières</p>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         NAVIGATION
+         ══════════════════════════════════════════════════════ -->
+    <nav class="nav" id="navbar">
+        <div class="nav__container">
+            <a href="{% url 'citations:home' %}" class="nav__brand">
+                <span class="nav__logo">N</span>
+                <span class="nav__name">Nina</span>
+            </a>
+            <div class="nav__links">
+                <a href="{% url 'citations:home' %}" class="nav__link nav__link--active">Citations</a>
+                <a href="#about" class="nav__link">À propos</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ══════════════════════════════════════════════════════
+         MAIN CONTENT
+         ══════════════════════════════════════════════════════ -->
+    <main class="main" id="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- ══════════════════════════════════════════════════════
+         FOOTER
+         ══════════════════════════════════════════════════════ -->
+    <footer class="footer" id="about">
+        <div class="footer__container">
+            <div class="footer__brand">
+                <span class="footer__logo">N</span>
+                <p class="footer__text">
+                    Chaque mot est une graine,<br>
+                    chaque citation un jardin.
+                </p>
+            </div>
+            <div class="footer__info">
+                <p class="footer__copyright">© 2024 Nina. Tous droits réservés.</p>
+                <p class="footer__made">Fait avec ♥ et de l'encre</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- ══════════════════════════════════════════════════════
+     CITATION DETAIL — HERO IMAGE
+     ══════════════════════════════════════════════════════ -->
+<section class="detail">
+    <div class="detail__hero animate-on-scroll">
+        <img src="{{ citation.image.url }}"
+             alt="Illustration de la citation"
+             class="detail__image">
+        <div class="detail__hero-overlay"></div>
+    </div>
+
+    <div class="detail__container">
+        <div class="detail__content animate-on-scroll" data-delay="200">
+            <span class="detail__category">{{ citation.get_category_display }}</span>
+
+            <blockquote class="detail__quote">
+                <svg class="detail__quote-mark" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" opacity="0.3">
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+                </svg>
+                <p class="detail__text">{{ citation.text }}</p>
+                <footer class="detail__author">
+                    <span class="detail__dash">—</span>
+                    <cite>{{ citation.author }}</cite>
+                </footer>
+            </blockquote>
+
+            <div class="detail__meta">
+                <time class="detail__date">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 6v6l4 2"/>
+                    </svg>
+                    {{ citation.created_at|date:"d F Y" }}
+                </time>
+            </div>
+        </div>
+
+        <!-- Back Button -->
+        <a href="{% url 'citations:home' %}" class="detail__back animate-on-scroll" data-delay="300">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Retour aux citations
+        </a>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     RELATED CITATIONS
+     ══════════════════════════════════════════════════════ -->
+{% if related %}
+<section class="related">
+    <div class="related__container">
+        <h2 class="related__title animate-on-scroll">Autres citations</h2>
+        <div class="related__grid">
+            {% for item in related %}
+            <article class="card card--small animate-on-scroll" data-delay="{{ forloop.counter }}00">
+                <a href="{% url 'citations:detail' item.pk %}" class="card__link">
+                    <div class="card__image-wrapper">
+                        <img src="{{ item.image.url }}"
+                             alt="Illustration"
+                             class="card__image"
+                             loading="lazy">
+                        <div class="card__overlay"></div>
+                    </div>
+                    <div class="card__content">
+                        <blockquote class="card__quote">
+                            "{{ item.text|truncatewords:15 }}"
+                        </blockquote>
+                        <footer class="card__footer">
+                            <span class="card__author">— {{ item.author }}</span>
+                        </footer>
+                    </div>
+                </a>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}
